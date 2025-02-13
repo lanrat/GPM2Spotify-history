@@ -1,5 +1,7 @@
 # Google Play Music Activity to Spotify Activity
 
+Convert Google Play Music listening history to Spotify format.
+
 These scripts convert `MyActivity.html` files generated from legacy Google Takeout dumps to the JSON export format used by Spotify.
 
 This allows you to use old data saved from GPM on more modern tools that can accept the Spotify format, like scrobbles.
