@@ -1,4 +1,6 @@
 .venv/
 .cache
-*.json
+albums_db.json
+data.json
+Streaming_History_Audio_Spotify.json
 MyActivity.html

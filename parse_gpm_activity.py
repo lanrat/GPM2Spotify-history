@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 from pyquery import PyQuery
 import dateparser
 from datetime import datetime
@@ -9,24 +8,14 @@ def parseActivity(file):
     pq = PyQuery(filename=file)
     tag = pq('div.mdl-typography--body-1')
     
-    
     items = []
-
     for item in tag:
-        #print(item)
-        #print(type(item))
         if item.text == None:
             continue
-        #print(dir(item))
         t = item.text_content()
         if not t.startswith("Listened"):
             continue
-        #print(t)
 
-        
-        #print(etree.tostring(item))
-        
-        #parts = [' '.join(p.strip().replace("\n", " ").split()) for p in item.itertext()]
         parts = []
         for p in item.itertext():
             # cleanup
@@ -54,7 +43,6 @@ def parseActivity(file):
         if len(parts) != 3:
             # just a few don't parse, ok to skip over
             continue
-        
 
         title = parts[0]
         artist = parts[1]
@@ -73,8 +61,6 @@ def parseActivity(file):
     return items
         
 
-
-
 def main(): 
     items = parseActivity('MyActivity.html') 
     print(f' got {len(items)} to save')
@@ -84,6 +70,4 @@ def main():
       
       
 if __name__ == "__main__": 
-  
-    # calling main function 
-    main() 
+    main()

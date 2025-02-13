@@ -28,10 +28,9 @@ def load_albums():
 
 
 def main():
-    
     data = load_albums()
     with open("Streaming_History_Audio_Spotify.json", "w") as file:
         json.dump(data, file, indent=2)
     
 if __name__ == "__main__": 
-    main() 
+    main()

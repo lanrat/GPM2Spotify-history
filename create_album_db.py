@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import json
@@ -71,7 +69,6 @@ def load():
                 count+=1
     
     print(f'loaded {len(data)} into {count} from {len(db)} artists')
-    
     return db
 
 
@@ -127,4 +124,4 @@ def main():
     
     
 if __name__ == "__main__": 
-    main() 
+    main()
