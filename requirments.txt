@@ -1,0 +1,16 @@
+certifi==2025.1.31
+charset-normalizer==3.4.1
+cssselect==1.2.0
+dateparser==1.2.1
+idna==3.10
+lxml==5.3.1
+pyquery==2.0.1
+python-dateutil==2.9.0.post0
+pytz==2025.1
+redis==5.2.1
+regex==2024.11.6
+requests==2.32.3
+six==1.17.0
+spotipy==2.25.0
+tzlocal==5.3
+urllib3==2.3.0
