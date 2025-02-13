@@ -16,9 +16,10 @@ def load_albums():
     for d in data:
         a = d["master_metadata_album_artist_name"]
         t = d["master_metadata_track_name"]
-        album = albums[a][t]
-        if album and len(album) > 0:
-            d["master_metadata_album_album_name"] = album
+        album_data = albums[a][t]
+        if album_data:
+            d["master_metadata_album_album_name"] = album_data['album']
+            d['ms_played'] = album_data['ms_played']
             count+=1
         out.append(d)
     
@@ -29,7 +30,7 @@ def load_albums():
 def main():
     
     data = load_albums()
-    with open("data_albums.json", "w") as file:
+    with open("Streaming_History_Audio_Spotify.json", "w") as file:
         json.dump(data, file, indent=2)
     
 if __name__ == "__main__": 

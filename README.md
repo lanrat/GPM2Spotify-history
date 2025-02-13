@@ -14,8 +14,10 @@ Notably the Album is mussing. This is a limitation due to the data Google provid
 
 ## create_album_db.py
 
-This program makes uses the previously generated `data.json` and the Spotify API to create `albums_db.json` which contains the missing album information for `data.json`
+This program makes uses the previously generated `data.json` and the Spotify API to create `albums_db.json` which contains the album and track duration information missing from `data.json`
+
+This can take about 15min for every 10k songs.
 
 ## add_albums.py
 
-This program takes the previously generated album data from `albums_db.json` to add album data to `data.json` and saves it in `data_albums.json`.
+This program takes the previously generated album data from `albums_db.json` to add album data to `data.json` and saves it in `Streaming_History_Audio_Spotify.json`.

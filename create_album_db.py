@@ -18,30 +18,31 @@ global sp
 
 def lookup(artist, track):
     data = None
+    duration = 0
     sleep=30
     c=0
     
     while data == None:
         c+=1
         try:
-            data = api_lookup(artist[:100], track[:100])
+            data, duration = api_lookup(artist[:100], track[:100])
         except ReadTimeout:
             if c >= 5:
                 print(f'hit max retry {c}, skipping this request...')
-                return None
+                return None, 0
             print(f'The request timed out, try {c}. Trying again in {sleep}s')
             time.sleep(sleep)
             continue
 
     
-    return data
+    return data, duration
 
 def api_lookup(artist, track):
     q="track:\"%s\" artist:\"%s\" " % (track, artist)    
     result = sp.search(q=q, limit=2, offset=0, type='track', market='US')
     if result['tracks']['total'] == 0:
         # none found
-        return ""
+        return "", (30 * 1000) # 30s
     if result['tracks']['total'] > 1:
         # multiple found, choosing first
         print("!!!! WARNING: multiple results found", result['tracks']['total'], q)
@@ -50,7 +51,8 @@ def api_lookup(artist, track):
 
 
     album = result['tracks']['items'][0]['album']['name']
-    return album
+    duration = result['tracks']['items'][0]['duration_ms']
+    return album, duration
 
 def load():
     db=collections.defaultdict(dict)
@@ -97,14 +99,15 @@ def run(db):
             if track in albums[artist]:
                 continue
             print(f'{count}: new track: {track}')
-            album = lookup(artist, track)
-            albums[artist][track] = album
+            album, ms = lookup(artist, track)
+            albums[artist][track] = {
+                "album": album,
+                "ms_played": ms
+            }
             print(f'\t{album}')
             
-            # testing
-            #time.sleep(0.1)
-            
-            if count % 25 == 0:
+            # save every so often to resume if needed
+            if count % 100 == 0:
                 print(f'## at count: {count}, saving')
                 save(albums)
     
