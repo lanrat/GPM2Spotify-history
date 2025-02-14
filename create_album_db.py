@@ -13,6 +13,7 @@ import time
 album_db_file='albums_db.json'
 
 global sp
+global cache
 
 def lookup(artist, track):
     data = None
@@ -31,13 +32,23 @@ def lookup(artist, track):
             print(f'The request timed out, try {c}. Trying again in {sleep}s')
             time.sleep(sleep)
             continue
-
     
     return data, duration
 
 def api_lookup(artist, track):
-    q="track:\"%s\" artist:\"%s\" " % (track, artist)    
-    result = sp.search(q=q, limit=2, offset=0, type='track', market='US')
+    global cache
+    global cache_new
+    result = None
+    q="track:\"%s\" artist:\"%s\" " % (track, artist)  
+    
+    # check cache
+    if q in cache:
+        print(f'!!! Found data in cache: {q}')
+        result = cache[q]
+    # perform lookup if cache miss
+    if not result:
+        result = sp.search(q=q, limit=2, offset=0, type='track', market='US')
+        cache[q] = result
     if result['tracks']['total'] == 0:
         # none found
         return "", (30 * 1000) # 30s
@@ -75,6 +86,9 @@ def load():
 def save(albums):
     with open(album_db_file, "w") as file:
         json.dump(albums, file, indent=2)
+    # save cache
+    with open('cache.json', "w") as file:
+        json.dump(cache, file, indent=2)
 
 def run(db):
     albums={}
@@ -104,7 +118,7 @@ def run(db):
             print(f'\t{album}')
             
             # save every so often to resume if needed
-            if count % 100 == 0:
+            if count % 200 == 0:
                 print(f'## at count: {count}, saving')
                 save(albums)
     
@@ -113,6 +127,13 @@ def run(db):
 
 def main(): 
     global sp
+    global cache
+    cache = {}
+    try:
+        with open('cache.json', 'r') as file:
+            cache = json.load(file)
+    except:
+        pass
     
     # auth
     auth_manager = SpotifyClientCredentials()
